@@ -7,8 +7,8 @@
 using namespace std;
 
 
-const int width = 10;
-const int height = 10;
+const int width = 9;
+const int height = 9;
 
 
 
