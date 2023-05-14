@@ -15,16 +15,16 @@ const int height = 9;
 
 int print_board(int grid[width][height])
 {
-  cout << "\n"  << endl;
+  cout << "\n\n\n\n"  << endl;
   int count = 0;
   for(int i = 0; i < height; i++){
-    cout << "\n"  << endl;
+    cout << "\n\n"  << endl;
     for(int j = 0; j < width; j++){
       cout << " " << grid[j][i];      
       count++;
     }
   }
-  cout << "\n"  << endl;
+  cout << "\n\n\n\n"  << endl;
   return 1;
 }
 
@@ -116,12 +116,10 @@ int solve (int grid[width][height], int x, int y)
     return -1;
   if(y >= height)
     return -1;
-  if(x > 8 || y > 8){
-    return 1;
-  }
   int finished = complete(grid);
   if(finished == 1){
     print_board(grid);
+    cout << "\n\n COMPLETED \n\n";
     exit(0);
   }
   if(grid[x][y]==0)
@@ -132,6 +130,8 @@ int solve (int grid[width][height], int x, int y)
         grid[x][y] = i;
         cout << "\n d[counter] = i \n";
         cout << "\n i : " <<  i << endl;
+        solve(grid, x, y+1);
+        solve(grid, x+1, y);
       }
     }
   }
