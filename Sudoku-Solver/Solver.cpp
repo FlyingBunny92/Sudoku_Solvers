@@ -15,6 +15,7 @@ const int height = 9;
 
 int print_board(int grid[width][height])
 {
+  cout << "\n"  << endl;
   int count = 0;
   for(int i = 0; i < height; i++){
     cout << "\n"  << endl;
@@ -23,6 +24,7 @@ int print_board(int grid[width][height])
       count++;
     }
   }
+  cout << "\n"  << endl;
   return 1;
 }
 
@@ -44,10 +46,10 @@ int print_board_with_position(int grid[width][height], int x, int y)
   return 1;
 }
 
-int complete(int grid[width][height], int x, int y)
+int complete(int grid[width][height])
 {
-  for(int i = 0; i < y; i++){
-    for(int j = 0; j < x; j++){
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){
       if(grid[i][j]==0){
         cout << "\n Sudoku is not complete"  << endl;
         return -1;
@@ -62,10 +64,6 @@ int complete(int grid[width][height], int x, int y)
 
 int check(int grid[width][height], int x, int y, int num)
 {
-  cout << "\n x:" << x << endl;
-  cout << "\n y:" << y << endl;
-  cout << "\n num:" << num << endl;
-  print_board(grid);
   // check column
   for(int m=0; m<width; m++){
     if(grid[m][y]==num){
@@ -112,13 +110,19 @@ int check(int grid[width][height], int x, int y, int num)
 
 int solve (int grid[width][height], int x, int y)
 {
+  cout << "\n x: \n" << x << endl;
+  cout << "\n y: \n" << y << endl;
+  if(x >= width)
+    return -1;
+  if(y >= height)
+    return -1;
   if(x > 8 || y > 8){
     return 1;
   }
-  // print_board(d, x, y);
-  int finished = complete(grid, x, y);
+  int finished = complete(grid);
   if(finished == 1){
-    return 1;
+    print_board(grid);
+    exit(0);
   }
   if(grid[x][y]==0)
   {
@@ -126,22 +130,13 @@ int solve (int grid[width][height], int x, int y)
       int result = check(grid, x, y, i);
       if(result == 1){
         grid[x][y] = i;
-        cout << "\n \n d[counter] = i \n";
-        cout << "\n \n i : " <<  i << endl;
-        if(x>7){
-          solve(grid, 0, y+1);
-        }else{
-          solve(grid, x+1, y);
-        }
-      }else{
-          cout << "\n Number already found: " << i << endl;
+        cout << "\n d[counter] = i \n";
+        cout << "\n i : " <<  i << endl;
       }
     }
-  }else if(x>7){
-          solve(grid, 0, y+1);
-  }else{
-    solve(grid, x+1, y);
   }
+  solve(grid, x, y+1);
+  solve(grid, x+1, y);
   return 1;
 }
 
@@ -163,13 +158,9 @@ int main () {
     while (getline (MyReadFile2, myText)) {
       j++;
       // Output the text from the file
-      cout << '\n';
-      cout << myText;
-      cout << '\n';
       // Traverse the string
       for (int i = 0; i < myText.length(); i++) {
           int dig = myText[i] - '0';
-          cout<< dig<< ", ";
           d.push_back(dig);
           mylist.push_back(dig);
           grid[i][j] =  dig;
