@@ -47,36 +47,36 @@ int print_board_with_position(int grid[width][height], int x, int y)
   return 1;
 }
 
-int complete(int grid[width][height])
+bool complete(int grid[width][height])
 {
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
       if(grid[i][j]==0){
         cout << "\n Sudoku is not complete \n"  << endl;
-        return -1;
+        return false;
       }
     }
   }
   cout << "\n Sudoku is complete  \n"  << endl;
   print_board(grid);
-  return 1;
+  return true;
 }
 
 
-int check(int grid[width][height], int x, int y, int num)
+bool check(int grid[width][height], int x, int y, int num)
 {
   // check column
   for(int m=0; m<width; m++){
     if(grid[m][y]==num){
       cout << "\n Return_#1 \n";
-      return -1;
+      return false;
     }
   }
   // check row
   for(int n=0; n<height; n++){
     if(grid[x][n]==num){
       cout << "\n Return_#2 \n";
-      return -1;
+      return false;
     }
   }
 
@@ -87,19 +87,19 @@ int check(int grid[width][height], int x, int y, int num)
     for(int m = 0; m <= 3; m++){
         if(grid[x0+l][y0+m]==num){
             cout << "\n Return_#3 \n";
-            return -1;
+            return false;
         }
     }
   }
 
 
-  return 1;
+  return true;
 }
 
 std::tuple<int, int> find_empty_spot(int grid[width][height])
 {
-    for(int i = 1; i < width; i++){
-      for(int j = 1; j < height; j++){
+    for(int i = 0; i < width; i++){
+      for(int j = 0; j < height; j++){
         if(grid[i][j]==0){
           return  {i, j};
         }
@@ -108,49 +108,36 @@ std::tuple<int, int> find_empty_spot(int grid[width][height])
     return  {-1, -1};
 }
 
-int solve(int grid[width][height])
+bool solve(int grid[width][height])
 {
-  int finished = complete(grid);
-  if(finished == 1){
-    print_board(grid);
-    cout << "\n\n ------------COMPLETED------------ \n\n";
-    exit(0);
-  }
   auto [x, y] = find_empty_spot(grid);
+  cout << "\n x : " <<  x << endl;
+  cout << "\n y : " <<  y << endl;
   if(x == -1 || y == -1){
     print_board(grid);
     cout << "\n\n ------------COMPLETED------------ \n\n";
-    exit(0);
+    return true;
   }
-  cout << "\n x : " <<  x << endl;
-  cout << "\n y : " <<  y << endl;
-
   for(int i = 1; i <= 9; i++){
-    int result = check(grid, x, y, i);
-    if(result == 1){
+    if(check(grid, x, y, i)){
       grid[x][y] = i;
       cout << "\n grid[x][y] = i; \n";
       cout << "\n i : " <<  i << endl;
-
       if(solve(grid)){
-        return 1;
+        return true;
       }
       grid[x][y] = 0;
     }
   }
-
-  return -1;
+  return false;
 }
 
 
 int main () {
-    list<int> mylist;
-    int myint;
     // Create a text string, which is used to output the text file
     string myText;
-    ifstream MyReadFile2("Grid17.txt");
+    ifstream MyReadFile2("Easy.txt");
     int grid[width][height];
-    vector<int> d;
     // Use a while loop together with the getline() function to read the file line by line
     int j = 0;
     while (getline (MyReadFile2, myText)) {
@@ -159,17 +146,16 @@ int main () {
       // Traverse the string
       for (int i = 0; i < myText.length(); i++) {
           int dig = myText[i] - '0';
-          d.push_back(dig);
-          mylist.push_back(dig);
           grid[i][j] =  dig;
       }
-  }
-  // Close the file
-  MyReadFile2.close();
+    }
+    // Close the file
+    MyReadFile2.close();
 
-  solve(grid);
-  print_board(grid);
-  
+
+    solve(grid);
+    print_board(grid);
+
 }
 
 
