@@ -32,9 +32,9 @@ int print_board(int grid[width][height])
 int print_board_with_position(int grid[width][height], int x, int y)
 {
   int count = 0;
-  for(int i = 0; i < y; i++){
+  for(int i = 0; i < width; i++){
     cout << "\n"  << endl;
-    for(int j = 0; j < x; j++){
+    for(int j = 0; j < height; j++){
       if(x==j && y==i){
         cout << "|" << grid[i][j];
       }else{
@@ -81,17 +81,19 @@ bool check(int grid[width][height], int x, int y, int num)
   }
 
   // check box
-  int x0 = (int)(x / 3);
-  int y0 = (int)(y / 3);
-  for(int l = 0; l <= 3; l++){
-    for(int m = 0; m <= 3; m++){
+  int x0 = x - (x%3);
+  int y0 = y - (y%3);
+  cout << "\n x0: " << x0 << endl;
+  cout << "\n y0: " << y0 << endl;
+  print_board_with_position(grid, x0, y0);
+  for(int l = 0; l < 3; l++){
+    for(int m = 0; m < 3; m++){
         if(grid[x0+l][y0+m]==num){
             cout << "\n Return_#3 \n";
             return false;
         }
     }
   }
-
 
   return true;
 }
@@ -106,6 +108,21 @@ std::tuple<int, int> find_empty_spot(int grid[width][height])
       }
     }
     return  {-1, -1};
+}
+
+bool init_grid(int grid[width][height])
+{
+    for(int i = 0; i < width; i++)
+    {
+      for(int j = 0; j < height; j++)
+      {
+        if(grid[i][j]==0)
+        {
+          grid[i][j] = 0;
+        }
+      }
+    }
+    return true;
 }
 
 bool solve(int grid[width][height])
@@ -136,7 +153,7 @@ bool solve(int grid[width][height])
 int main () {
     // Create a text string, which is used to output the text file
     string myText;
-    ifstream MyReadFile2("Easy.txt");
+    ifstream MyReadFile2("Hard.txt");
     int grid[width][height];
     // Use a while loop together with the getline() function to read the file line by line
     int j = 0;
@@ -152,7 +169,7 @@ int main () {
     // Close the file
     MyReadFile2.close();
 
-
+    init_grid(grid);
     solve(grid);
     print_board(grid);
 
